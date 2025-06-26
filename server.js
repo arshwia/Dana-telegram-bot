@@ -1,30 +1,29 @@
 import 'dotenv/config';
 import TelegramBot from 'node-telegram-bot-api';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 
 const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, { polling: true });
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const userMessage = msg.text;
 
   if (!userMessage) {
-    bot.sendMessage(chatId, "ببخشید ما اینجا تکیست مهور هستیم. با تشکر");
+    bot.sendMessage(chatId, "ببخشید ما اینجا متن محور هستیم. با تشکر");
     return;
   }
 
   try {
-    const response = await openai.createChatCompletion({
+    const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: userMessage }],
     });
 
-    const botReply = response.data.choices[0].message.content;
+    const botReply = response.choices[0].message.content;
     bot.sendMessage(chatId, botReply);
 
   } catch (error) {
