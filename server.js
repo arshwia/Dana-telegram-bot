@@ -19,7 +19,7 @@ bot.on('message', async (msg) => {
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-o3",
       messages: [{ role: "user", content: userMessage }],
     });
 
